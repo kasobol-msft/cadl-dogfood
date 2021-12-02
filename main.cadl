@@ -3,20 +3,17 @@ import "@cadl-lang/openapi3";
 
 @serviceTitle("Storage Queues")
 @serviceVersion("2021-03-25")
-@Cadl.Rest.produces("application/xml")
-@Cadl.Rest.consumes("application/xml")
 namespace Storage.Queues;
 
 using Cadl.Http;
 
 @doc("Storage Queues Messages")
 @route("/{queueName}/messages")
-@Cadl.Rest.produces("application/xml")
-@Cadl.Rest.consumes("application/xml")
 namespace Storage.Queues.Messages {
   @doc("Puts message on the queue.")
   @post
   op putMessage(
+    @header contentType: "application/xml",
     @path queueName: string,
     @query visibilitytimeout?: int32,
     @query messagettl?: int32,
@@ -25,6 +22,5 @@ namespace Storage.Queues.Messages {
 }
 
 model QueueMessage {
-  @header contentType: "application/xml";
   MessageText: string;
 }
