@@ -26,14 +26,15 @@ model QueueMessage {
   MessageText: string;
 }
 
-model CreatedResponseWithBody<T> extends CreatedResponse {
+model CreatedResponseWithBody<T> is CreatedResponse {
+  @header contentType: "application/xml";
+
   @doc("The reponse body.")
   @body
   body: T;
 }
 
 model QueueMessagesList {
-  @header contentType: "application/xml";
   QueueMessage: QueueMessageWithDetails;
 }
 
