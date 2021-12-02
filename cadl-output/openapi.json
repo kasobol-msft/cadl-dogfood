@@ -12,6 +12,17 @@
         "summary": "Puts message on the queue.",
         "parameters": [
           {
+            "name": "accept",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/xml"
+              ]
+            }
+          },
+          {
             "name": "queueName",
             "in": "path",
             "required": true,
@@ -39,12 +50,12 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "The request has succeeded and a new resource has been created as a result.",
+          "200": {
+            "description": "A successful response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Cadl.Http.CreatedResponse"
+                  "$ref": "#/components/schemas/QueueMessagesList"
                 }
               }
             }
@@ -75,10 +86,46 @@
           "MessageText"
         ]
       },
-      "Cadl.Http.CreatedResponse": {
+      "QueueMessagesList": {
         "type": "object",
-        "properties": {},
-        "description": "The request has succeeded and a new resource has been created as a result."
+        "properties": {
+          "QueueMessage": {
+            "$ref": "#/components/schemas/QueueMessageWithDetails"
+          }
+        },
+        "required": [
+          "QueueMessage"
+        ]
+      },
+      "QueueMessageWithDetails": {
+        "type": "object",
+        "properties": {
+          "MessageId": {
+            "type": "string"
+          },
+          "InsertionTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ExpirationTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "PopReceipt": {
+            "type": "string"
+          },
+          "TimeNextVisible": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "MessageId",
+          "InsertionTime",
+          "ExpirationTime",
+          "PopReceipt",
+          "TimeNextVisible"
+        ]
       }
     }
   }

@@ -14,13 +14,32 @@ namespace Storage.Queues.Messages {
   @post
   op putMessage(
     @header contentType: "application/xml",
+    @header accept: "application/xml",
     @path queueName: string,
     @query visibilitytimeout?: int32,
     @query messagettl?: int32,
     @body message: QueueMessage
-  ): CreatedResponse;
+  ): CreatedResponseWithBody<QueueMessagesList>;
 }
 
 model QueueMessage {
   MessageText: string;
+}
+
+model CreatedResponseWithBody<T> extends CreatedResponse {
+  @doc("The reponse body.")
+  @body
+  body: T;
+}
+
+model QueueMessagesList {
+  QueueMessage: QueueMessageWithDetails;
+}
+
+model QueueMessageWithDetails {
+  MessageId: string;
+  InsertionTime: zonedDateTime;
+  ExpirationTime: zonedDateTime;
+  PopReceipt: string;
+  TimeNextVisible: zonedDateTime;
 }
