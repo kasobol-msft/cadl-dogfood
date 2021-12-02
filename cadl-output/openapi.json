@@ -1,27 +1,60 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Hello world",
-    "version": "0.1.0"
+    "title": "Storage Queues",
+    "version": "2021-03-25"
   },
   "tags": [],
   "paths": {
-    "/hello": {
-      "get": {
-        "operationId": "Hello_sayHi",
-        "summary": "Returns 'hi'",
-        "parameters": [],
+    "/{queueName}/messages": {
+      "post": {
+        "operationId": "Messages_putMessage",
+        "summary": "Puts message on the queue.",
+        "parameters": [
+          {
+            "name": "queueName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "visibilitytimeout",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "messagettl",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
-          "200": {
-            "description": "The request has succeeded.",
+          "201": {
+            "description": "The request has succeeded and a new resource has been created as a result.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string",
-                  "enum": [
-                    "hi"
-                  ]
+                  "$ref": "#/components/schemas/Cadl.Http.CreatedResponse"
                 }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueueMessage"
               }
             }
           }
@@ -29,5 +62,24 @@
       }
     }
   },
-  "components": {}
+  "components": {
+    "schemas": {
+      "QueueMessage": {
+        "type": "object",
+        "properties": {
+          "MessageText": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "MessageText"
+        ]
+      },
+      "Cadl.Http.CreatedResponse": {
+        "type": "object",
+        "properties": {},
+        "description": "The request has succeeded and a new resource has been created as a result."
+      }
+    }
+  }
 }

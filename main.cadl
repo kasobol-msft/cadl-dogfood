@@ -1,16 +1,30 @@
 import "@cadl-lang/rest";
 import "@cadl-lang/openapi3";
 
-@serviceTitle("Hello world")
-@serviceVersion("0.1.0")
-namespace Demo.HelloWorld;
+@serviceTitle("Storage Queues")
+@serviceVersion("2021-03-25")
+@Cadl.Rest.produces("application/xml")
+@Cadl.Rest.consumes("application/xml")
+namespace Storage.Queues;
 
 using Cadl.Http;
 
-@doc("Hello world service")
-@route("/hello")
-namespace Hello {
-  @doc("Returns 'hi'")
-  @get
-  op sayHi(): OkResponse<"hi">;
+@doc("Storage Queues Messages")
+@route("/{queueName}/messages")
+@Cadl.Rest.produces("application/xml")
+@Cadl.Rest.consumes("application/xml")
+namespace Storage.Queues.Messages {
+  @doc("Puts message on the queue.")
+  @post
+  op putMessage(
+    @path queueName: string,
+    @query visibilitytimeout?: int32,
+    @query messagettl?: int32,
+    @body message: QueueMessage
+  ): CreatedResponse;
+}
+
+model QueueMessage {
+  @header contentType: "application/xml";
+  MessageText: string;
 }
