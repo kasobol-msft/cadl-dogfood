@@ -33,6 +33,7 @@ model CreatedResponseWithBody<T> extends CreatedResponse {
 }
 
 model QueueMessagesList {
+  @header contentType: "application/xml";
   QueueMessage: QueueMessageWithDetails;
 }
 
